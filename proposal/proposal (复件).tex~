@@ -1,0 +1,53 @@
+\documentclass[conference]{IEEEtran}
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+\usepackage{epsfig}
+\usepackage{amsopn}
+\usepackage{subfigure}
+\usepackage{cite}
+\ifCLASSINFOpdf
+
+\else
+\fi
+
+\usepackage[cmex10]{amsmath}
+
+\interdisplaylinepenalty = 2500
+
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+\title{Research Proposal}
+
+\author{\authorblockN{Quan~Wang\authorrefmark{1}, Tingwu~Wang\authorrefmark{1}, Wenxin~Wang\authorrefmark{1}, and Tianpen~Li\authorrefmark{1}}
+      \small\authorblockA{\authorrefmark{1}Department of Electronic Engineering, Tsinghua University, Beijing, 100084, P. R. China\\
+        E-mail: wtw12@mails.tsinghua.edu.cn, wangquan.thu@aliyun.com, stieizc.33@gmail.com, 370756595@qq.com}
+
+\maketitle
+\section{Introduction}
+Pedestrian detection is a key problem in computer vision,
+with several applications that have the potential to positively
+impact quality of life.\\\indent
+Pedestrian detection is a difficult task from a machine
+vision perspective. The lack of explicit models leads to the
+use of machine learning techniques, where an implicit
+representation is learned from examples.
+While there is much ongoing research in machine
+vision approaches for detecting pedestrians, varying
+evaluation protocols and use of different data sets makes
+direct comparisons difficult.
+\section{Related Work}
+\section{Current Resources and Follow Study}
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{Ref}
+\end{document}
+
+

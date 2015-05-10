@@ -1,0 +1,99 @@
+\documentclass[conference]{IEEEtran}
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+\usepackage{epsfig}
+\usepackage{amsopn}
+\usepackage{subfigure}
+\usepackage{cite}
+\ifCLASSINFOpdf
+
+\else
+\fi
+
+\usepackage[cmex10]{amsmath}
+
+\interdisplaylinepenalty = 2500
+
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+\title{Research Proposal}
+\author{\authorblockN{Quan~Wang\authorrefmark{1}, Tingwu~Wang\authorrefmark{1}, Wenxin~Wang\authorrefmark{1}, and Tianpen~Li\authorrefmark{1}}
+      \small\authorblockA{\authorrefmark{1}Department of Electronic Engineering, Tsinghua University, Beijing, 100084, P. R. China\\
+        E-mail: wtw12@mails.tsinghua.edu.cn, wangquan.thu@aliyun.com, stieizc.33@gmail.com, 370756595@qq.com}
+	}
+\maketitle
+\section{Introduction}
+Pedestrian detection is a key problem in computer vision,
+with several applications that have the potential to positively
+impact quality of life.\\\indent
+Pedestrian detection is a difficult task from a machine
+vision perspective. The lack of explicit models leads to the
+use of machine learning techniques, where an implicit
+representation is learned from examples.
+In this proposal, we summarize the different perspectivs of studying
+Pedestrian Detection problem with the help of several well written survey \cite{S1,S2,S3}.
+And illustrate what we could do during the work.
+\section{Previous Study}
+There are numerous papers studying the problems from different perspectives, which includes:\\\indent
+\textbf{ROI Selection}:
+The simplest technique to obtain initial object location
+hypotheses is the sliding window technique,
+where detector windows at various scales and locations are shifted over the
+image.\\\indent
+\textbf{Classification}:
+After a set of initial object hypotheses has been acquired,
+further verification (classification) involves pedestrian
+appearance models, using various spatial and temporal
+cues\\\indent
+\textbf{Tracking}:
+There has been extensive work on the tracking of
+pedestrians to infer trajectory-level information. One line
+of research has formulated tracking as frame-by-frame
+association of detections based on geometry and dynamics
+without particular pedestrian appearance models 
+\section{Current Resources}
+We currently have over 50 papers on the Pedestrian Detection Problem,
+all of them from the ICCV, ECCV, CVPR after 2011.
+We have access to over 6 large data bases and more than 5 open source source codes on the problem.
+\subsection{Related Work}
+\subsubsection{Haar Wavelet-Based Cascade}
+The Haar wavelet-based cascade framework provides
+an efficient extension to the sliding window approach by
+introducing a degenerate decision tree of increasingly
+complex detector layers. 
+\subsubsection{Neural Network Using Local Receptive Fields}
+Adaptive local receptive fields (LRF) have been shown
+to be powerful features in the domain of pedestrian
+detection, in combination with a multilayer feed-forward
+neural network architecture (NN/LRF).
+\subsubsection{Histograms of Oriented Gradients with Linear SVM (HOG/linSVM)}
+We follow the approach of Dalal and Triggs to model
+local shape and appearance using well-normalized dense
+histograms of gradient orientation
+\subsubsection{Combined Shape-Texture-Based Pedestrian Detection}
+We consider a monocular version of the real-time PROTECTOR system by cascading shape-based
+pedestrian detection with texture-based pedestrian classification.
+\subsection{Data Set}
+Multiple public pedestrian datasets have been collected over the years, which includes:
+INRIA, ETH, TUD-Brussels, Daimler (Daimler stereo), Caltech-USA, and KITTI.
+\section{What Could We Do}
+\subsection{Groups to Follow}
+To efficiently get started and not to be drowned by the numerous papers,
+we focus on several groups that are consistently researching the problems, which includes:
+Dr. Xiaogang Wang \cite{W1,W2,W3,W4,W5,W6,W7} and 
+Dr. Rodrigo Benenson from Max-Planck-Institut f\"ur Informatik \cite{R1,R2,R3,R4,R5,R6,R7}
+\subsection{Time Table}
+We sort out and finish the literature review by Week 9. 
+We read and revise by week 11, after which we will focus on the developing of our won algorithms.
+The research point could be applying deep learning, 
+but no conclusion could be made before a full understanding of literature is accomplished.
+\bibliographystyle{IEEEtran}
+\bibliography{Ref}
+\end{document}
