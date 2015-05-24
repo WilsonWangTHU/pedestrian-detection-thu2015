@@ -1,0 +1,380 @@
+function [] = Test_nme8(alg, ps, DatasetChoice, Tchoice, dstbasepath, c, Frames, BBname, bbshowset_all, LatSVM_Model)
+Choice = 0;
+NoParts = 1;
+ScoreAdd = 0;
+Only2Ped = 1;
+UseHumanPart = 0;
+global Ped2ScoreAdd;
+global EvalAll;
+global UsePedParts;
+global Kernel_SVM;
+PartNum = 5;
+% ContextSize= 49;
+% Sel = GetSel();
+Ovlap_T = 0.01;
+global T_Ped2;
+% if Only2Ped && ~UseHumanPart
+%     T_Ped2 = -1;
+% end
+load('BoxLR_p', 'BoxLR_p');
+load('D:\wlouyang\hog\Params\INRIA_ovlpPos_SC2_DR2.mat');
+% load('D:\wlouyang\hog\Params\INRIA_ovlpPos_SC1.mat');
+% load('D:\wlouyang\hog\Params\INRIA_ovlpPos_MOG1_DR2.mat');
+load('D:\wlouyang\hog\Params\INRIA_ovlpPos3.mat');
+for i = 1:length(center)
+    Centers((i-1)*3+1:i*3, :) = center{i};
+    Vars((i-1)*3+1:i*3, :) = variance{i};
+end;
+    Modelname2 = 'D:\wlouyang\hog\Params\LatSVM-MR-20PartsS_I_model2';
+    load(Modelname2);
+    w1_1 = w1; w1_2 = w2; w1_3 = w3; w1_class = w_class;
+% load(BBname_Ped2, 'bbshowset_all');
+bbset_ped2_all = bbshowset_all;
+load(BBname, 'bbshowset_all');
+name = 'Var_Ped2_SC_DR2_BBox_2';
+% name = ['Var_Ped2_MOG1_DR2_2'];
+% name = ['Var_Ped2_MOG1_DR2'];
+load(['D:\wlouyang\hog\Params\' name], 'Var1', 'Var2');
+
+fnum = length(bbshowset_all);
+
+if Frames > 0
+    fnum = min(fnum, Frames);
+end;
+Ped2Num = 0;
+Ped1Num = 0;
+ShowResults = 0;
+ShowResults2 = 0;
+switch DatasetChoice %0: caltech train;  1: ETHZ;  2: tudbrussels 3: Occ
+    case 0
+        load('D:\wlouyang\hog\Params\CaltechFileNames2');
+    case 1
+        load('D:\wlouyang\hog\Params\ETHFileNames');
+    case 2
+        load('D:\wlouyang\hog\Params\tudbrussels');
+    case 3
+        load('D:\wlouyang\hog\Params\Occ_testFilename', 'ImagSourcepaths', 'dstbasepathParts', 'ImNames', 'Resname', 'fileNum');
+    case 4
+        load('D:\wlouyang\hog\Params\Caltec_TestFilename');
+end;
+InitT = 1;
+CandNum = 500;
+load('Param_ab');
+global INRIAExt;
+for i = 1:fnum %for each frame
+    ys = [];
+    hs = [];
+
+    bbshow = bbshowset_all{i};
+if ~isempty(bbshow)
+    if LatSVM_Model || DatasetChoice == 4
+        if (DatasetChoice ~= 2 && DatasetChoice ~= 0) ||EvalAll || INRIAExt
+            bbshow = bbshow';
+        end;
+    end;
+    bbshow = bbshow([1:4 end], :)';
+    if EvalAll
+        if(alg.resize{1}), bbshow=bbApply('resize',bbshow,alg.resize{2:4}); end;
+    end;
+    
+    if InitT
+        InitT = 0;
+        score = bbshow(:, end);
+        score = sort(score, 'descend');
+%         ThrNew = score(end);
+%         if DatasetChoice == 0
+%             ThrNew = score(end);
+%         end;
+%         ThrNew = -1; %-0.6
+    if LatSVM_Model
+        if ~EvalAll
+%             Ped1ThrTable = [-0.3 -0.4 -0.5 -0.6 -0.7 -0.8 -0.9];
+%                             Btable = repmat(Ped1ThrTable, [1 5]);
+%                             Btable = Btable(:);
+%             ThrNew = Ped1ThrTable(alg.c);
+            ThrNew = -0.5; %-0.6
+        else
+                ThrNew = -100; %-0.6
+        end;
+    else
+        ThrNew = -0.7; %-0.6
+    end;
+        fprintf('ThrNew: %f\n', ThrNew);
+        bbshow(bbshow(:, end)<ThrNew, :) = [];
+        fprintf('Num of Cands: %f\n', size(bbshow,1));
+        if size(bbshow,1) > CandNum %220 is good
+            ThrNew = score(CandNum);
+            fprintf('ThrNew: %f\n', ThrNew);
+            bbshow(bbshow(:, end)<ThrNew, :) = [];
+            fprintf('Num of Cands: %f\n', size(bbshow,1));
+        end;
+        Thr = min(bbshow(:, end));
+    end;
+    bbshow(bbshow(:, end)<ThrNew, :) = [];
+    N = size(bbshow, 1);
+    Keep = false(N);
+    Ped1Num = Ped1Num + size(bbshow, 1);
+    if Tchoice == 0
+        Score = bbshow(:, end);
+    else
+        bbshow(:, end) = bbshow(:, end) + ScoreAdd;
+                y = [bbshow(:, 2) ];
+                h = [bbshow(:, 4) ];
+                y = y - h;
+                ys = y;
+                hs = h;
+                hs1 = h;
+                ys1 = y;
+        
+        bbPed2 = bbset_ped2_all{i};
+        
+%         if 0
+        if ~isempty(bbPed2)
+
+            bbPed2(:, bbPed2(22, :) < T_Ped2) = [];
+%                 bbPed2(end, :) = bbPed2(end, :) + Ped2ScoreAdd;
+            bbPed2 = bbPed2';
+            %% first NMS step
+            SingleNum = size(bbshow, 1);
+            DoubleNum = size(bbPed2, 1);
+            if Only2Ped
+                bbPed2(:, 22) = (bbPed2(:, 22)+100) * 1;
+            else
+                if DatasetChoice == 1
+                    bbPed2(:, 22) = (bbPed2(:, 22)) *2.5 + 0.15;
+                else
+                    bbPed2(:, 22) = (bbPed2(:, 22)) *2.5;
+                end
+            end
+            bballs = [bbshow(:, [1:4 end] ); bbPed2(:, [1:4 22])];
+            bballs(:, 3:4) = bballs(:, 3:4) + bballs(:, 1:2);
+            if Only2Ped && UseHumanPart
+                pick = nms_pick2(bballs, 0.9);
+            else
+                % 0.62
+                if Only2Ped && ~UseHumanPart
+                    pick = nms_pick2(bballs, 0.5);
+                else
+                    if DatasetChoice == 2
+                        pick = nms_pick2(bballs, 0.62);
+                    else
+                        pick = nms_pick2(bballs, 0.55);
+                    end
+                end
+            end
+            pick1 = pick;
+            pick1(pick1>SingleNum) = [];
+            if Only2Ped
+                pick1 = [];
+            end
+            bbshow = bbshow(pick1, :);
+            pick2 = pick;
+            pick2(pick2<=SingleNum) = [];
+            pick2 = pick2 - SingleNum;
+            bbPed2 = bbPed2(pick2, :);
+            bbPed2(:, 22) = (bbPed2(:, 22)) +0.1;
+        else
+            bballs = bbshow(:, [1:4 end] );
+            bballs(:, 3:4) = bballs(:, 3:4) + bballs(:, 1:2);
+            pick = nms_pick2(bballs, 0.5);
+            bbshow = bbshow(pick, :);            
+        end
+
+        for RefineIter = 1
+            if ~isempty(bbPed2)
+                %descriptor
+                Ped2Score = 0;
+                bbPed2Mixture = int8(bbPed2(:, 15)*2);
+                Ped2Num = Ped2Num + size(bbPed2, 1);
+                Ped2bbs = [];
+                Ped2bbs1 = [];
+                Ped2bbs2 = [];
+                for MixtureChoice = 1:9
+                    MixtureFlag = (bbPed2Mixture == MixtureChoice);
+                    bbPed2_Mix = bbPed2(MixtureFlag, :);
+% PartBox: [rootx1 rootx2 rootw part1x1 part2y1 part2x1 part2y1 ... part5x1 part5y1]
+                    PartBox = [bbPed2_Mix(:, [24:36]) ones(size(bbPed2_Mix, 1), 1)];
+                    PartBox2 = PartBox;
+                    for pidx = 1:PartNum
+                        PartBox2(:, pidx*2+2:pidx*2+3) = PartBox(:, pidx*2+2:pidx*2+3) - PartBox(:, 1:2);
+                    end
+                    PartBox212 = PartBox2(:, 1:2);
+                    PartBox2(:, 1:2) = [];
+                    if size(PartBox2, 1) < 1
+                        continue;
+                    end
+
+                    bb1 = PartBox2 * BoxLR_p{MixtureChoice}{1};
+                    bb2 = PartBox2 * BoxLR_p{MixtureChoice}{2};
+                    bb1(:, 5) = bbPed2_Mix(:, 22);
+                    bb2(:, 5) = bbPed2_Mix(:, 22);
+                    
+                    bb1(:, 1:2) = bb1(:, 1:2) + PartBox212;
+                    bb2(:, 1:2) = bb2(:, 1:2) + PartBox212;
+
+                        bbp1 = bbPed2_Mix(:, 4+1:4+5);
+                        bbp2 = bbPed2_Mix(:, 4+5+1:4+5+5);
+                        bbp1(:, 3:4) = bbp1(:, 3:4) - bbp1(:, 1:2) +1;
+                        bbp2(:, 3:4) = bbp2(:, 3:4) - bbp2(:, 1:2) +1;
+                        
+                    if ~Only2Ped %|| (Only2Ped && ~UseHumanPart)
+                        Overlap11 = diag(TestOverlap(bb1(:, 1:4), bbp1(:, 1:4), 1));
+                        Overlap12 = diag(TestOverlap(bb1(:, 1:4), bbp2(:, 1:4), 1));
+                        Overlap21 = diag(TestOverlap(bb2(:, 1:4), bbp1(:, 1:4), 1));
+                        Overlap22 = diag(TestOverlap(bb2(:, 1:4), bbp2(:, 1:4), 1));
+                        bbp12 = bbp1;
+                        bbp12(Overlap12>=Overlap11, 5) = bbp2(Overlap12>=Overlap11, 5);
+                        bbp22 = bbp2;
+                        bbp22(Overlap22<Overlap21, 5) = bbp2(Overlap22<Overlap21, 5);
+
+                        flag1 = bbp22(:, 5) > bbp12(:, 5);
+                        bb1(flag1, 5) = bb1(flag1, 5) +  (bbp12(flag1, 5) - bbp22(flag1, 5))*1.1;
+                        flag1 = bbp12(:, 5) > bbp22(:, 5);
+                        bb2(flag1, 5) = bb2(flag1, 5) +  (bbp22(flag1, 5) - bbp12(flag1, 5))*1.1;
+                        OvT = 0.6;
+                        bb1Flag = Overlap11 <OvT & Overlap12 < OvT;
+                        bb1(bb1Flag, :) = [];
+                        bb2Flag = Overlap21 < OvT & Overlap22 < OvT;
+                        bb2(bb2Flag, :) = [];
+                    end
+                    if UseHumanPart && Only2Ped 
+                        bb1 = bbp1;
+                        bb2 = bbp2;
+                    end;
+                    Ped2bbs1 = [Ped2bbs1;  bb1];
+                    Ped2bbs2 = [Ped2bbs2;  bb2];
+
+                end;
+                if ~isempty(Ped2bbs1)
+                    Ped2bbs = [Ped2bbs1; Ped2bbs2];
+
+                    bbtmp = Ped2bbs;
+                    bbtmp(:, 3:4) = bbtmp(:, 3:4) + bbtmp(:, 1:2);
+                    pick = nms_pick2(bbtmp(:, [1:4 end]), 0.5);
+                    Ped2bbs = Ped2bbs(pick, :);
+                end
+                if ~isempty(Ped2bbs) && ~Only2Ped
+                    Ped2bbs(Ped2bbs(:, 4)<50, :) = [];
+                end
+                if UseHumanPart && ~ Only2Ped
+                    MulTable = [0.2 0.3 0.4 0.5 0.6 0.8 1];
+                    Ped2bbs(:, 5) = (Ped2bbs(:, 5)) *0.5;
+                end
+            else
+                P2 = 0;
+                Ped2bbs = [];
+            end;
+            if Only2Ped
+                bbshow = [Ped2bbs];
+            else
+                bbshow = [bbshow; Ped2bbs];
+            end
+            
+            end;
+            
+            bbshow2 = bbshow;
+    end;
+else
+    My = 1; Keep = [];
+end;
+    if DatasetChoice ~= 3
+        srcName = SrcNames{i};
+        dstName3 = [dstbasepath srcName(9:end)];
+    else
+        dstName3 = [dstbasepath Resname{i}];
+    end;
+    
+    fid2 = fopen(dstName3, 'w');
+    if (size(bbshow, 1)>0)
+        fprintf(fid2, '%f, %f, %f, %f, %f\n', bbshow');
+    end;
+    fclose(fid2);
+
+    if (mod(i, 64) == 1 && i~=1)
+        fprintf('%d ', i);
+    end;
+    if (mod(i, 640) == 1 && i~=1)
+        fprintf('\n', i);
+    end;
+    if (i<10) && ~isempty(bbshow)
+        Score = bbshow(:, end);
+        fprintf('%d newscore max: %.4f, min: %.4f, cands: %d\n', i, max(Score), min(Score), size(bbshow, 1));
+    end;
+
+end;
+fprintf('Ped2Num: %f,  Ped1Num: %f\n', Ped2Num, Ped1Num);
+
+
+function pick = nms_pick2(boxes, overlap)
+
+% top = nms(boxes, overlap) 
+% Non-maximum suppression.
+% Greedily select high-scoring detections and skip detections
+% that are significantly covered by a previously selected detection.
+
+if isempty(boxes)
+  top = [];
+  pick = [];
+else
+  x1 = boxes(:,1);
+  y1 = boxes(:,2);
+  x2 = boxes(:,3);
+  y2 = boxes(:,4);
+  s = boxes(:,end);
+  area = (x2-x1+1) .* (y2-y1+1);
+
+  [vals, I] = sort(s);
+  pick = [];
+  while ~isempty(I)
+    last = length(I);
+    i = I(last);
+    pick = [pick; i];
+    suppress = [last];
+    for pos = 1:last-1
+      j = I(pos);
+      xx1 = max(x1(i), x1(j));
+      yy1 = max(y1(i), y1(j));
+      xx2 = min(x2(i), x2(j));
+      yy2 = min(y2(i), y2(j));
+      w = xx2-xx1+1;
+      h = yy2-yy1+1;
+      if w > 0 && h > 0
+        o = w * h / area(j);
+        o2 = w * h / area(i);
+        o = max(o2, o);
+         if o > overlap
+          suppress = [suppress; pos];
+        end
+      end
+    end
+    I(suppress) = [];
+  end  
+%   top = boxes(pick,:);
+end
+
+
+
+function descriptor = GetDiscriptor(bb1, bb2)
+%bb1, bb2: [x1 y1 x2 y2]
+%descriptor [-x (right) -y (right is at bottom) -s (right is smaller)]
+%descriptor [ x (N/A)    y (right is at top)     s (right is larger)]
+posbb(1, :) = bb1;
+posbb(2, :) = bb2;
+posbb2 = posbb;
+posbb(:, 3:4) = posbb(:, 3:4) - posbb(:, 1:2) + 1; %w h
+posbb(:, 1:2) = posbb(:, 1:2) + posbb(:, 3:4)*0.5; %center
+if (posbb(1, 1) > posbb(2, 1))%make sure posbb(1, :) is on the left
+    tmp = posbb(1, :);
+    posbb(1, :) = posbb(2, :);
+    posbb(2, :) = tmp;
+    tmp = posbb2(1, :);
+    posbb2(1, :) = posbb2(2, :);
+    posbb2(2, :) = tmp;
+end;
+descriptor(1:2) = posbb(1,1:2) - posbb(2,1:2);
+descriptor(3) = posbb(2, 3);%right size divide left size, >0, left is smaller, <0 left is larger
+descriptor = descriptor ./ repmat(posbb(1, 3), 1, 3);
+descriptor(3) = log2(descriptor(3));
+
+
+

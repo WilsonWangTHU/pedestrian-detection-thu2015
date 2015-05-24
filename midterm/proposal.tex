@@ -1,0 +1,68 @@
+\documentclass[conference]{IEEEtran}
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+\usepackage{epsfig}
+\usepackage{amsopn}
+\usepackage{subfigure}
+\usepackage{cite}
+\ifCLASSINFOpdf
+
+\else
+\fi
+\usepackage{url}
+\usepackage[cmex10]{amsmath}
+\interdisplaylinepenalty = 2500
+
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+\title{Midterm Report}
+\author{\authorblockN{Quan~Wang\authorrefmark{1}, Tingwu~Wang\authorrefmark{1}, Wenxin~Wang\authorrefmark{1}, and Tianpen~Li\authorrefmark{1}}
+      \small\authorblockA{\authorrefmark{1}Department of Electronic Engineering, Tsinghua University, Beijing, 100084, P. R. China\\
+        E-mail: wtw12@mails.tsinghua.edu.cn, wangquan.thu@aliyun.com, stieizc.33@gmail.com, 370756595@qq.com}
+	}
+\maketitle
+\section{Paper Reading and coding}
+During the past months, we read the following papers:
+\subsubsection{Benenson's Group}
+Benenson's group provides the state-of-art performance of real time pedestrian detection \cite{R1,R2,R3,R4,R5}.
+But it is also clear that the gpu required codes are not suitable for reproducing.
+It is difficult to implement, as none of us are equipped with the required hardware.
+\subsubsection{Subhransu Maji's Group}
+The paper \cite{M1} discuss straightforward classification using kernelized SVMs
+They evaluate the kernel for a test vector and each of the support vectors. 
+But the algorithm is kind of out of date. 
+And although we succeeded in rerunning it, but we choose to drop it.
+\subsubsection{Ouyang's Group}
+After reading \cite{W1,W2,W3,W4,W5}, we believe it is the right group to follow.
+In their work, a multi-pedestrian detector is learned
+with a mixture of deformable part-basedmodels
+to effectively capture the unique visual patterns appearing in multiple nearby pedestrians. 
+The training data is labeled as usual, i.e. a bounding box for each pedestrian. 
+The spatial configuration patterns of multiple nearby pedestrians are learned and clustered into mixture component.  
+In the multi-pedestrian detector, each single pedestrian is specifically designed as a part, 
+called pedestrian-part. 
+A new probabilistic framework is proposed to model the configuration relationship between results of multi-pedestrian detection and 1-pedestrian detection.
+With this framework, multi-pedestrian detection results are used to refine 1-pedestrian detection results.
+\section{A github homepage}
+We set up a github homepage \url{https://github.com/WilsonWangTHU/pedestrian-detection-thu2015}.\\
+\indent And currently we are revising the code for the first stable commit.
+\section{What next?}
+There are several few more points possible to be revised.
+\subsection{A Convolutional implementation?}
+Clearly the pedestrian detection could do more, like pipline a Fast-RCNN to further detect the pose and clothes of the pedestrians.
+It is clear the results of \cite{W5} could be further used as a bounding box or ROI.
+I have experience of using Fast-RCNN and caffe pipeline, 
+and clearly the results of the \cite{W5} could be used as the input of a new deep network.
+\subsection{Contextual information}
+Convolutional network could further improved if we could use some additional contextual information.
+The work of \cite{W5} did not, and it could possible be helpful.
+\bibliographystyle{IEEEtran}
+\bibliography{Ref}
+\end{document}

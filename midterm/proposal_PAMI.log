@@ -1,0 +1,91 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2014.10.27)  18 APR 2015 20:36
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**proposal_PAMI.tex
+(./proposal_PAMI.tex
+LaTeX2e <2011/06/27>
+Babel <3.9f> and hyphenation patterns for 78 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+No file proposal_PAMI.aux.
+\openout1 = `proposal_PAMI.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 24.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 47.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 47.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 47.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 74.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 78.
+
+
+LaTeX Warning: Citation `key:foo' on page 1 undefined on input line 78.
+
+
+LaTeX Warning: Citation `foo:baz' on page 1 undefined on input line 79.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 94.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 94.
+[1
+
+
+] (./proposal_PAMI.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 281 strings out of 493308
+ 3332 string characters out of 6139930
+ 56682 words of memory out of 5000000
+ 3808 multiletter control sequences out of 15000+600000
+ 11564 words of font info for 33 fonts, out of 8000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 23i,13n,21p,172b,285s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on proposal_PAMI.dvi (1 page, 4484 bytes).
