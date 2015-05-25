@@ -1,6 +1,7 @@
 global EvalAll; EvalAll = true;  %true; 
 % True: evaluate all approaches except LatSVM-V2
-% False: evaluate only LatSVM-V2, average miss rate should be 41%, 63% and 58% for ETH, TUD and Caltech respectively
+% False: evaluate only LatSVM-V2, average miss rate should be 41%, 63% and 
+% 58% for ETH, TUD and Caltech respectively
 % We admit that we have tuned the parameters for LatSVM-V2. But our
 % approach still improve LatSVM-V2 with large margin even if the parameters
 % are fixed.
@@ -11,16 +12,12 @@ fclose all;
 global T_Ped2;
 global Ped2ScoreAdd; 
 Ped2Choice = 6;
-addpath('../eval');
-if ~exist('parthadd', 'var')
-    addpath('../eval');
-    parthadd = 1;
-end;
+addpath('../eval'); 
 
 
 Frames = 0;
 global Choice;
-Choice = 205;
+Choice = 205; % what is choice?
 global INRIAExt;  INRIAExt = false; 
 
 LatSVM_Model = 1; % 1: DPM parts model
@@ -32,14 +29,16 @@ ReLoadPos_ped2 = 0;
 ReLoadNeg_ped2 = 0;
 
 
+% read some configuration, Algnames are different models
 [Algnames resFlags ChoiceTable] = GetAlgNames(EvalAll);
 
 
 for DatasetChoice = [1 2 4]  % 1: ETHZ;  2: tudbrussels  4: Caltech Test    
     if EvalAll
-        if OneAlg == 1
+        if OneAlg == 1 % run only for one loops
             NumLoop = 1;
         else
+			% now, only run the last USA dataset, but run more times
             if DatasetChoice == 4
                 NumLoop = 14;
             else
@@ -49,8 +48,9 @@ for DatasetChoice = [1 2 4]  % 1: ETHZ;  2: tudbrussels  4: Caltech Test
     else
         NumLoop = 1;
     end;
-    for c = [1:NumLoop] 
-%     for c = [NumLoop:-1:1] 
+
+
+    for c = [1:NumLoop]  % c is a int, referring to the number of loop
         if EvalAll
             if OneAlg
                 ChoiceTable = 1;
@@ -62,7 +62,7 @@ for DatasetChoice = [1 2 4]  % 1: ETHZ;  2: tudbrussels  4: Caltech Test
                 end;
             end
         else
-            ChoiceTable = zeros(NumLoop, 1);
+            ChoiceTable = zeros(NumLoop, 1); % ???
             Algnames{1} = 'LatSVM-V2';
             resFlags = zeros(NumLoop, 1);
         end;
@@ -84,17 +84,23 @@ for DatasetChoice = [1 2 4]  % 1: ETHZ;  2: tudbrussels  4: Caltech Test
                 end;
             end;
         end;
-        Choice = ChoiceTable(1); %This influences the function GetBBContext
+        Choice = ChoiceTable(1); % This influences the function GetBBContext
+								 % how?
         Algname = Algnames{c};
+
         [Ped2ScoreAdd T_Ped2] = GetPed2Params(DatasetChoice, LatSVM_Model, INRIAExt);
+		
         if LatSVM_Model
             [dstbasepath BBname BBname_Ped2] = GetBBName(DatasetChoice, Ped2Choice, EvalAll, INRIAExt, c, Algname);
-       end;
+        end;
+
         ps = [1 1];
+
         if ~exist('BBname_Ped2_old', 'var') || ~strcmp(BBname_Ped2_old, BBname_Ped2)
             load(BBname_Ped2, 'bbshowset_all');
         end;
-        fprintf('Using  %s as single pedestrian detector\n', Algname);
+
+        fprintf('Using %s as single pedestrian detector\n', Algname);
         fprintf('New results are in %s\n', dstbasepath);
         Test_nme6_3_learnab(DatasetChoice, Tchoice, dstbasepath, c, Frames, BBname, bbshowset_all,  LatSVM_Model);        
         Test_nme(alg, ps, DatasetChoice, Tchoice, dstbasepath, c, Frames, BBname, bbshowset_all,  LatSVM_Model);

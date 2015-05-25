@@ -1,6 +1,8 @@
 function [dstbasepath BBname BBname_Ped2]  = GetBBName(DatasetChoice, Ped2Choice, EvalAll, INRIAExt, c, Algname)
+% simply getting the name of the data base the dstbasepath is the result
+% output dir
 
-switch DatasetChoice %0: caltech train;  1: ETHZ;  2: tudbrussels 3: Occ
+switch DatasetChoice % 0: caltech train;  1: ETHZ;  2: tudbrussels 3: Occ
     case 1
         dstbasepath = sprintf('../eval/data-ETH/res/LatSVM-nme-%02i/', c);
         if EvalAll 
