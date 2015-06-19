@@ -1,0 +1,1 @@
+-lm -lcblas -latlas -lpng -ljpeg -lfftw3 -lfftw3f -lpthread -llinear -lavcodec -lavformat -lswscale -lgsl -lgslcblas -lcuda -lcudart -lcublas -L/usr/local/cuda/lib64

@@ -1,0 +1,1 @@
+/home/wtw/barinova_pedestrians_detection/ObjectDetection/ObjectDetection/CMakeFiles/object_detection.dir
