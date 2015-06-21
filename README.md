@@ -33,11 +33,10 @@ This pedestrian detector is under the MIT License (refer to the LICENSE file for
 The cuda, cblas, atlas is what you really need to get. Other packages, you either already have it in Ubuntu, or could easily install using a sudo trick.
 2. OpenCV library with 2.6+
 3. g++ with 4.6 or earlier
-g++ with less then 4.6 might work (or have a little compiling problem). I don't know.
-
 
 ### Requirements, hardware
-1. A GPU that support CUDA-7, or CUDA-6, earlier versions are your own adventures, cause I don't know what will happen.
+A GPU that support CUDA-7, or CUDA-6, earlier versions are your own adventures, cause I don't know what will happen.
+
 ### Requirements, Data
 The data is a big issue. Check out the $PEDESTRIAN/data/whats in the data directory.png
 It lists all the data I used to run the projects.
@@ -46,20 +45,23 @@ Take a look in the source file $PEDESTRIAN/pedestrian/, download what is necessa
 ### install
 1. make sure you download all the lib you need.
 2. make the ccv library by 
-```shell
-cd lib
-./configure && make
-```
+ ```shell
+ cd lib
+ ./configure && make
+ ```
 3. download the data you need, check out the
-```shell
-pedestrian-detection-thu2015/data/whats in the data directory.png
-```
+ ```shell
+ pedestrian-detection-thu2015/data/whats in the data directory.png
+ ```
+
 4. Using the g++ to compile the source code.
-```shell
-cd pedestrian-detection-thu2015/pedestrian/
-g++ ...
-```
-remember to add the ccv dependency in /lib/.dep
+ ```shell
+ cd pedestrian-detection-thu2015/pedestrian/
+ g++ ...
+ ```
+Remember to add the ccv dependency in /lib/.dep
+
 and the ccv lib you just make in the step 2
+
 and the OpenCV lib of course.
 5. The results is stored in the /data/results (or change the path if you want)
